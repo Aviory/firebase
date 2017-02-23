@@ -34,6 +34,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'//fire notify
     compile 'com.google.firebase:firebase-config:10.0.1'
+    compile 'com.google.firebase:firebase-storage:10.0.1'//storage
+    compile 'com.firebaseui:firebase-ui-storage:0.6.0'//image loader
 
     testCompile 'junit:junit:4.12'
 }

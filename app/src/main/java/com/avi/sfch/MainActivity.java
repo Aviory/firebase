@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +40,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -129,8 +132,11 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                                     .getDrawable(MainActivity.this,
                                             R.drawable.ic_account_circle_black_36dp));
                 } else {
-                    Glide.with(MainActivity.this)
-                            .load(friendlyMessage.getPhotoUrl())
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://simplefirechat-6ff2e.appspot.com");
+                    StorageReference logoFromStorege = storageRef.child("logo.jpg");
+                    Glide.with(MainActivity.this)//download from firebase storage
+                            .using(new FirebaseImageLoader())
+                            .load(logoFromStorege)
                             .into(viewHolder.userImageView);
                 }
             }
@@ -211,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
 
-    public void fetchConfig() {
+    public void fetchConfig() {//change desing
         long cacheExpiration = 3600; // 1 hour in seconds
         // If developer mode is enabled reduce cacheExpiration to 0 so that
         // each fetch goes to the server. This should not be used in release
