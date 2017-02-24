@@ -1,4 +1,6 @@
-package com.avi.sfch;
+package com.avi.sfch.model;
+
+import com.firebase.geofire.GeoLocation;
 
 /**
  * Created by PC on 21-Feb-17.
@@ -9,8 +11,17 @@ public class ChatMessage {
     private String text;
     private String name;
     private String photoUrl;
+    private GeoLocation geoLocation;
 
     public ChatMessage() {
+    }
+
+    public GeoLocation getGeoLocation() {
+        return geoLocation;
+    }
+
+    public void setGeoLocation(GeoLocation geoLocation) {
+        this.geoLocation = geoLocation;
     }
 
     public ChatMessage(String text, String name, String photoUrl) {

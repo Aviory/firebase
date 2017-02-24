@@ -4,16 +4,9 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avi.sfch.model.ChatMessage;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -244,3 +238,4 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 });
     }
 }
+//https://github.com/firebase/geofire-java
