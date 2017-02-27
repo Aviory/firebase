@@ -18,6 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avi.sfch.model.ChatMessage;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
+import com.firebase.geofire.LocationCallback;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -26,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.FirebaseDatabase;
@@ -165,6 +171,12 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 mSimpleFirechatDatabaseReference.child("messages")
                         .push().setValue(friendlyMessage);
                 mMsgEditText.setText("");
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geo");
+                GeoFire geoFire = new GeoFire(ref);
+                for (int i=1;i<=5000;i++){
+                    geoFire.setLocation("bot"+i, new GeoLocation(37.7832-i/100, -122.4056-i/100));
+                }
+
             }
         });
 
@@ -180,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
         mFirebaseRemoteConfig.setConfigSettings(firebaseRemoteConfigSettings);
         mFirebaseRemoteConfig.setDefaults(defaultConfigMap);
+
 
         fetchConfig();
     }
@@ -201,6 +214,51 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 return true;
             case R.id.reconfig:
                 fetchConfig();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geo");
+                GeoFire geoFire = new GeoFire(ref);
+//                geoFire.getLocation(mUsername, new LocationCallback() { // get my location
+//                    @Override
+//                    public void onLocationResult(String key, GeoLocation location) {
+//                        if (location != null) {
+//                            System.out.println(String.format("The location for key %s is [%f,%f]", key, location.latitude, location.longitude));
+//                        } else {
+//                            System.out.println(String.format("There is no location for key %s in GeoFire", key));
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                        System.err.println("There was an error getting the GeoFire location: " + databaseError);
+//                    }
+//                });
+                GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(37.7832, -122.4056), 20000.6);// query for location
+
+                geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                    @Override
+                    public void onKeyEntered(String key, GeoLocation location) {
+                        System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+                    }
+
+                    @Override
+                    public void onKeyExited(String key) {
+                        System.out.println(String.format("Key %s is no longer in the search area", key));
+                    }
+
+                    @Override
+                    public void onKeyMoved(String key, GeoLocation location) {
+                        System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+                    }
+
+                    @Override
+                    public void onGeoQueryReady() {
+                        System.out.println("All initial data has been loaded and events have been fired!");
+                    }
+
+                    @Override
+                    public void onGeoQueryError(DatabaseError error) {
+                        System.err.println("There was an error with this query: " + error);
+                    }
+                });
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

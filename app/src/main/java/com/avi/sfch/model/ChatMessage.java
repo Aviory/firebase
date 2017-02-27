@@ -11,18 +11,18 @@ public class ChatMessage {
     private String text;
     private String name;
     private String photoUrl;
-    private GeoLocation geoLocation;
+//    private GeoLocation geoLocation;
 
     public ChatMessage() {
     }
 
-    public GeoLocation getGeoLocation() {
-        return geoLocation;
-    }
-
-    public void setGeoLocation(GeoLocation geoLocation) {
-        this.geoLocation = geoLocation;
-    }
+//    public GeoLocation getGeoLocation() {
+//        return geoLocation;
+//    }
+//
+//    public void setGeoLocation(GeoLocation geoLocation) {
+//        this.geoLocation = geoLocation;
+//    }
 
     public ChatMessage(String text, String name, String photoUrl) {
         this.text = text;
